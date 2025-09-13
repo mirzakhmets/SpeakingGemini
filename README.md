@@ -1,0 +1,2 @@
+# SpeakingGemini
+Speaking Gemini app
