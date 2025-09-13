@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!--
+		Run without CORS: chrome --disable-web-security
+	-->
+
+	<style>
+        /* Global Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a5568;
+            font-size: 2em;
+        }
+
+        /* Stunning HR Design - Ragged/Decorative */
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #e2e8f0, #cbd5e0, #e2e8f0, transparent);
+            margin: 30px 0;
+            position: relative;
+        }
+
+        hr::before,
+        hr::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border: 2px solid #a0aec0;
+            border-radius: 50%;
+        }
+
+        hr::before {
+            left: -10px;
+            transform: translateX(-50%);
+        }
+
+        hr::after {
+            right: -10px;
+            transform: translateX(50%);
+        }
+
+        /* Form Controls Styling - Inputs, Select, Radio, Checkbox */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Custom Radio and Checkbox */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: #4a5568;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+        }
+
+        .custom-radio,
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            margin-right: 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        input[type="checkbox"] + .custom-checkbox {
+            border-radius: 4px;
+        }
+
+        input[type="radio"]:checked + .custom-radio::after,
+        input[type="checkbox"]:checked + .custom-checkbox::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+        }
+
+        input[type="checkbox"]:checked + .custom-checkbox::after {
+            border-radius: 2px;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(to bottom right, #667eea, #764ba2);
+        }
+
+        input[type="radio"]:checked + .custom-radio,
+        input[type="checkbox"]:checked + .custom-checkbox {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* Textarea Specific */
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        textarea:focus {
+            min-height: 140px;
+        }
+
+		/* File Input Styling */
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+		/*
+        input[type="file"] {
+            display: none;
+        }
+		*/
+
+        .custom-file-upload {
+            display: inline-block;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .custom-file-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #4a5568;
+            text-align: center;
+        }
+
+        /* Button */
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+	
+	<script>
+		var PHONE_NUMBER = '7084040268';
+		
+		var myAgents = [
+			{
+				name : 'Алиса',
+				API_KEY : "AIzaSyDgJFRMeZH-GaJ1CYg-5o0qR70sbjLrVWM",
+				API_URL : "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+			},
+			{
+				name : 'Базилио',
+				API_KEY : "AIzaSyB62e3tc5aGVEY3NdpTDw8-82RTbXu8mag",
+				API_URL : "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+			}
+		];
+		var myTrainingSet = [];
+	
+		const synth = window.speechSynthesis;
+		const pdfPath = './typical.pdf';
+		var russianVoice = null;
+		let voices;
+		
+        function loadVoices() {
+			voices = synth.getVoices();
+			
+			russianVoice = voices.find(voice => voice.lang.startsWith('ru'));
+		}
+		
+		// in Google Chrome the voices are not ready on page load
+		if ("onvoiceschanged" in synth) {
+			synth.onvoiceschanged = loadVoices;
+		} else {
+			loadVoices();
+		}
+		
+		function speakText(text) {
+			try {
+				var utterance = new SpeechSynthesisUtterance(text);
+				
+				utterance.rate = 0.9;
+				
+				if (russianVoice != null) {
+					utterance.voice = russianVoice;
+				}
+				
+				speechSynthesis.speak(utterance);
+			} finally {
+			}
+		}
+	</script>
+	
+	<script>
+		async function speakMessage(text) {
+			if (document.getElementById('enableSound').checked) {
+				speakText(text);
+			}
+		}
+		
+		async function sendToTelegram(text2) {
+			if (document.getElementById('enableWhatsApp').checked) {
+				const whatsappUrl = 'https://wa.me/+' + PHONE_NUMBER + '?text=' + encodeURIComponent(text2);
+				
+				window.open(whatsappUrl, '_blank');
+			}
+			
+			if (document.getElementById('enableTelegramBot').checked) {
+				const url = 'https://api.telegram.org/bot8138927729:AAER6l5ljTWy8feAXkHPLdj2_6gX0CAgGAI/sendMessage';
+				
+				/*
+				let xhr = new XMLHttpRequest();
+				xhr.open('GET', 'https://api.telegram.org/bot8138927729:AAER6l5ljTWy8feAXkHPLdj2_6gX0CAgGAI/sendMessage?chat_id=-1003016157732&text=' + text2, true);
+				
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState === 4 && xhr.status === 200) {
+						console.log(xhr.responseText);
+					}
+				};
+				xhr.send();
+				*/
+				
+				// https://api.telegram.org/bot8138927729:AAER6l5ljTWy8feAXkHPLdj2_6gX0CAgGAI/sendMessage?chat_id=-1003016157732&text=test
+				
+				/*
+				try {
+					const response = await fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							chat_id: '-1003016157732',
+							text: text2
+						})
+					});
+					
+					const data = await response.json();
+					
+					if (data.ok) {
+						console.log ('Message sent successfully!');
+					} else {
+						console.error ('Error: ' + data.description);
+					}
+				} catch (error) {
+					console.error ('Request failed: ' + error.message);
+				}
+				*/
+				
+				let xhr = new XMLHttpRequest();
+				xhr.open('GET', 'telegram.php?text=' + encodeURIComponent(text2.trim()), true);
+				
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState === 4 && xhr.status === 200) {
+						console.log(xhr.responseText);
+					}
+				};
+				
+				xhr.send();
+				
+			}
+		}
+		
+		async function trainAgent(agent) {
+			const response = await fetch(agent.API_URL + '?key=' + agent.API_KEY, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' , 'X-goog-api-key': agent.API_KEY },
+				body: JSON.stringify({
+					contents: [ { role : 'user', parts: [{ text: 'Пусть тебя зовут ' + agent.name }] }]
+				})
+			});
+			
+			for (var i in myTrainingSet) {
+				try {
+					const response = await fetch(agent.API_URL + '?key=' + agent.API_KEY, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' , 'X-goog-api-key': agent.API_KEY },
+						body: JSON.stringify({
+							contents: [ { role : 'user', parts: [{ text: myTrainingSet[i].train }] }]
+						})
+					});
+				} finally {
+				}
+			}
+		}
+		
+		async function emitMessage(agent, message) {
+			for (var i in myAgents) {
+				if (myAgents[i] != agent) {
+					const response = await fetch(myAgents[i].API_URL + '?key=' + myAgents[i].API_KEY, {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' , 'X-goog-api-key': agent.API_KEY },
+							body: JSON.stringify({
+								contents: [ { role : 'user', parts: [{ text: 'Пусть ' + agent.name + ' сказал(-а): ' + message }] }]
+						})
+					});
+				}
+			}
+		}
+		
+		async function sendMessage(agent, message) {
+			if (agent == null) {
+				document.getElementById('chat').value += 'Ваше сообщение: ' + message + '\n';
+				
+				sendToTelegram (message);
+				
+				return;
+			}
+			
+			if (!message) return;
+
+			var a = message.split(' ');
+			
+			var cmax = 0, imax = -1;
+			
+			for (var i in myTrainingSet) {
+				var b = myTrainingSet[i].question.split(' ');
+				var c = 0;
+				
+				for (var j in a) {
+					for (var k in b) {
+						if (a[j].toLowerCase() == b[k].toLowerCase()) {
+							++c;
+							
+							break;
+						}
+					}
+				}
+				
+				if (c > cmax) {
+					cmax = c;
+					imax = i;
+				}
+			}
+			
+			if (cmax > a.length * 0.8 && imax != -1) {
+				document.getElementById('chat').value += agent.name + ': ' + myTrainingSet[imax].answer + '\n';
+				
+				emitMessage(agent, myTrainingSet[imax].answer);
+				
+				speakMessage(myTrainingSet[imax].answer);
+				
+				sendToTelegram(agent.name + ': ' + myTrainingSet[imax].answer);
+				
+				return;
+			}
+			
+			try {
+				const response = await fetch(agent.API_URL + '?key=' + agent.API_KEY, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' , 'X-goog-api-key': agent.API_KEY },
+					body: JSON.stringify({
+						contents: [ { role : 'user', parts: [{ text: message }] }]
+					})
+				});
+				
+				if (!response.ok) {
+					throw new Error(`API Error: ${response.status}`);
+				}
+
+				const data = await response.json();
+				const aiResponse = data.candidates[0].content.parts[0].text;
+				
+				document.getElementById('chat').value += agent.name + ': ' + aiResponse + '\n';
+				
+				emitMessage(agent, aiResponse);
+				
+				speakMessage(aiResponse);
+				
+				sendToTelegram (agent.name + ': ' + aiResponse);
+				
+				return;
+			} catch (error) {
+				console.error('Error:', error);
+			}
+			
+			return;
+		}
+		
+		function notifyMessage(agentIndex, text) {
+			if (agentIndex == 0) {
+						
+				for (var i in myAgents) {
+					sendMessage(myAgents[i], text);
+				}
+
+				return;
+			}
+			
+			sendMessage(myAgents[agentIndex - 1], text);
+		}
+	</script>
+	
+	
+</head>
+
+<body>
+	<div class="container">
+	
+	<h1>Интерактивный чат</h1>
+	
+	Перечень "типичных" вопросов:
+	
+	<br>
+	<br>
+	
+	<div class="file-upload">
+		<input type="file" id="pdfInput" accept="application/pdf">		
+	</div>
+
+	
+	<!-- <input type="file" id="pdfInput" accept="application/pdf"> <label for="pdfInput" class="custom-file-upload">Upload File</label>-->
+	
+	<script>
+		// Set the worker source for PDF.js
+		pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+	</script>
+	
+	<script>
+		document.getElementById('pdfInput').addEventListener('change', function(event) {
+			const file = event.target.files[0];
+			if (file && file.type === 'application/pdf') {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					const arrayBuffer = e.target.result;
+					pdfjsLib.getDocument(new Uint8Array(arrayBuffer)).promise.then(function(pdf) {
+						let textContent = '';
+						const numPages = pdf.numPages;
+						var index = 0, q, ans;
+						
+						const processPage = (pageNum) => {
+							return pdf.getPage(pageNum).then(function(page) {
+								return page.getTextContent().then(function(text) {
+									for (var i in text.items) {
+										if (text.items[i].str.length == 0) {
+											continue;
+										}
+										
+										++index;
+										
+										if ((index % 3) == 0) {
+											myTrainingSet.push( { question : q, answer : ans, train : text.items[i].str } );
+										} else if ((index % 3) == 1) {
+											q = text.items[i].str;
+										} else {
+											ans = text.items[i].str;
+										}
+										
+										// myTrainingSet.push( { answer : text.items[i].str } );
+									}
+									
+									textContent += text.items.map(item => item.str).join('\n');
+								});
+							});
+						};
+
+						let pagePromises = [];
+						for (let i = 1; i <= numPages; i++) {
+							pagePromises.push(processPage(i));
+						}
+						
+						Promise.all(pagePromises).then(() => {
+							console.log (textContent);						
+							console.log (JSON.stringify(myTrainingSet));
+							
+							for (var i in myAgents) {
+								trainAgent (myAgents[i]);
+							}
+						}).catch(function(error) {
+							console.error('Error reading PDF:', error);
+						});
+					});
+				};
+				
+				reader.readAsArrayBuffer(file);
+			}
+		});
+	</script>
+
+	<div class="form-group">
+	
+	<p>
+		<input type="checkbox" id="enableSound"> Включить "озвучку"
+	</p>
+	
+	<p>
+		<input type="checkbox" id="enableWhatsApp"> Отправлять в WhatsApp
+	</p>
+	
+	<p>
+		<input type="checkbox" id="enableTelegramBot"> Отправлять "боту" в Телеграм
+	</p>	
+	
+	</div>
+	
+	<hr>
+	
+	<textarea id="chat" rows="12"></textarea>
+	
+	<hr>
+	
+	Кому:
+	
+	<select id="agentSelect">
+        <!-- Options will be added dynamically -->
+		<option value="-1">Всем</option>
+    </select>
+	
+	<script>
+		// Get the select element
+		const selectElement = document.getElementById('agentSelect');
+		
+		// Dynamically create and append options
+		myAgents.forEach(agent => {
+			const option = document.createElement('option');
+			option.textContent = agent.name; // Set the display text
+			selectElement.appendChild(option);
+		});
+	</script>
+	
+	<br>
+	
+	Ваше сообщение:
+	
+	<input type="text" id="userMessage">
+	
+	<button
+		onclick="sendMessage(null, document.getElementById('userMessage').value); notifyMessage(document.getElementById('agentSelect').selectedIndex, document.getElementById('userMessage').value);">Отправить</button>
+	
+	<hr>
+	
+	<button onclick="window.open('https://call.whatsapp.com/video/6CStHRLK4iVwm3PETMO0ty', '_blank')">Позвонить</button>
+	
+	<hr>
+	
+	<button id="authorize_button" style="display: none;" onclick="handleAuthClick()">Авторизоваться</button>
+	
+	<br>
+	<br>
+	
+	<button id="signout_button" style="display: none;" onclick="handleSignoutClick()">Выйти</button>
+	
+	<br>
+	<br>
+	
+  <!-- Load the Google API client library -->
+  <script src="https://apis.google.com/js/api.js"></script>
+  <!-- Load the Google Identity Services library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    const CLIENT_ID = '1030248547005-7vm2ont97jo6b09hl72j7q2qk7o5knde.apps.googleusercontent.com';  // Replace with your OAuth 2.0 Client ID
+    const API_KEY = 'AIzaSyB521JxTF4RYCcWexZEvtWLzqhp1K4yx9k';  // Optional API key for public queries
+	const DISCOVERY_DOCS = [
+      'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+      'https://www.googleapis.com/discovery/v1/apis/docs/v1/rest'
+    ];
+	const SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/documents';
+
+    let tokenClient;
+    let gapiInited = false;
+    let gisInited = false;
+
+    // Initialize Google API client
+    function gapiLoaded() {
+      gapi.load('client', initializeGapiClient);
+    }
+
+    async function initializeGapiClient() {
+      try {
+        await gapi.client.init({
+          apiKey: API_KEY,
+          discoveryDocs: DISCOVERY_DOCS,
+        });
+        gapiInited = true;
+        maybeEnableButtons();
+      } catch (error) {
+        console.error('GAPI initialization failed:', error);
+      }
+    }
+
+    // Initialize Google Identity Services
+    function gisLoaded() {
+      if (typeof google === 'undefined') {
+        console.error('Google Identity Services not loaded');
+        return;
+      }
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: '', // Defined in handleAuthClick
+      });
+      gisInited = true;
+      maybeEnableButtons();
+    }
+
+    function maybeEnableButtons() {
+      if (gapiInited && gisInited) {
+        document.getElementById('authorize_button').style.display = 'block';
+      }
+    }
+
+    function handleAuthClick() {
+      tokenClient.callback = async (resp) => {
+        if (resp.error !== undefined) {
+          console.error('Auth error:', resp);
+          //document.getElementById('content').innerText = 'Auth error: ' + resp.error;
+          return;
+        }
+        document.getElementById('signout_button').style.display = 'block';
+        document.getElementById('authorize_button').innerText = 'Обновить';
+        await listFiles(); // Example: List files after auth
+      };
+
+      if (gapi.client.getToken() === null) {
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      } else {
+        tokenClient.requestAccessToken({ prompt: '' });
+      }
+    }
+
+    function handleSignoutClick() {
+      const token = gapi.client.getToken();
+      if (token !== null) {
+        google.accounts.oauth2.revoke(token.access_token);
+        gapi.client.setToken('');
+        document.getElementById('authorize_button').innerText = 'Authorize';
+        document.getElementById('signout_button').style.display = 'none';
+        //document.getElementById('content').innerText = '';
+      }
+    }
+
+    // Example: List Google Docs
+    async function listFiles() {
+      try {
+        const response = await gapi.client.drive.files.list({
+          pageSize: 10,
+          fields: 'files(id, name, mimeType)',
+          q: "mimeType='application/vnd.google-apps.document'",
+        });
+        let output = '';
+        response.result.files.forEach(file => {
+          output += `${file.name}: ${file.id}\n`;
+        });
+        //document.getElementById('content').innerText = output || 'No Google Docs found.';
+      } catch (error) {
+        //document.getElementById('content').innerText = 'Error: ' + error.message;
+      }
+    }
+
+    // Load GAPI and GIS
+    function start() {
+      gapiLoaded();
+      // Use setTimeout to ensure GIS script is loaded
+      setTimeout(gisLoaded, 1000); // Adjust delay if needed
+    }
+	
+	var FILE_ID = '1DAuHIk4yW4L1RHh_abgQzdpGW6myG7TyTNgN__My2Ko';
+		
+	async function readDoc() {
+      const fileId = FILE_ID;
+      if (!fileId) {
+        //output.innerText = 'Enter a File ID.';
+        return;
+      }
+      try {
+        const response = await gapi.client.drive.files.export({
+          fileId: fileId,
+          mimeType: 'text/plain',  // Or 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' for DOCX
+        });
+		
+        //output.innerText = `Exported Content:\n${response.body}`;
+		
+		document.getElementById('chat').value = response.body;
+      } catch (err) {
+        console.error(`Error reading file: ${err.message}`);
+      }
+    }
+
+    // Write: Upload plain text as new revision to Google Doc
+    async function writeDoc() {
+      const fileId = FILE_ID;
+      if (!fileId) {
+        //output.innerText = 'Enter a File ID.';
+        return;
+      }
+      const newContent = document.getElementById('chat').value;  // Sample content
+      const blob = new Blob([newContent], {type: 'text/plain'});
+
+      try {
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify({}), {type: 'application/json'}]));  // Empty metadata
+        form.append('file', blob, 'SpeakingGPT.txt');  // Temp name; imports as Doc
+
+        const response = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=multipart`, {
+          method: 'PATCH',
+          headers: new Headers({ 'Authorization': `Bearer ${gapi.client.getToken().access_token}` }),
+          body: form
+        });
+		
+        const result = await response.json();
+        //output.innerText = `Updated successfully! New revision ID: ${result.id}`;
+      } catch (err) {
+        //output.innerText = `Error writing file: ${err.message}`;
+      }
+    }
+	
+	// Update file content
+    function updateFile() {
+      const content = document.getElementById('chat').value;
+      const blob = new Blob([content], { type: 'text/plain' });
+
+      // First, get the current file metadata (optional, for verification)
+      gapi.client.drive.files.get({
+        fileId: FILE_ID,
+        fields: 'id, name'
+      }).then(response => {
+        console.log('File found:', response.result.name);
+
+        // Update the file content
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify({})], { type: 'application/json' }));
+        form.append('file', blob);
+
+        fetch(`https://www.googleapis.com/upload/drive/v3/files/${FILE_ID}?uploadType=multipart`, {
+          method: 'PATCH',
+          headers: new Headers({ 'Authorization': `Bearer ${gapi.client.getToken().access_token}` }),
+          body: form
+        }).then(response => {
+          if (response.ok) {
+            console.log('File updated successfully');
+            //alert('File updated successfully!');
+          } else {
+            console.error('Error updating file:', response.statusText);
+            //alert('Error updating file');
+          }
+        }).catch(error => {
+          console.error('Error updating file:', error);
+          //alert('Error updating file');
+        });
+      }).catch(error => {
+        console.error('Error fetching file metadata:', error);
+        //alert('Error fetching file metadata');
+      });
+    }
+	
+    // Call start when the GIS script is loaded
+    window.onload = start;
+  </script>
+  
+  
+	<button onclick="readDoc()">Восстановить чат</button>
+	
+	<br>
+	<br>
+	
+	<button onclick="updateFile()">Сохранить чат</button>
+	
+	</div>
+</body>
+
+</html>
